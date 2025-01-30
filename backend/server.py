@@ -88,9 +88,7 @@ def update_llm_tools():
 
 @app.post("/define_tool/")
 async def define_tool(tool_definition: ToolDefinition):
-    """
-    Define a new tool with the specified configuration.
-    """
+
     try:
         # Convert field definitions to the correct format
         processed_fields = {}
@@ -161,4 +159,5 @@ def invoke_tool(query: str):
     if not llm_with_tools:
         raise HTTPException(status_code=400, detail="No tools have been defined yet")
     response = llm_with_tools.invoke(query)
+    print(response)
     return {"query": query, "response": response}
