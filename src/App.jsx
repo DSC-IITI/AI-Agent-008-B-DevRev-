@@ -95,7 +95,7 @@ export default function App() {
           };
         });
 
-        const response = await fetch("http://127.0.0.1:8000/define_tool/", {
+        const response = await fetch("http://localhost:5000/define_tool/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -106,6 +106,33 @@ export default function App() {
             fields: fields,
           }),
         });
+        try {
+          for (const entry of toolEntries) {
+            const fields = {};
+            entry.fieldRows.forEach((row) => {
+              fields[row.name] = {
+                field_type: row.type,
+                description: row.description,
+              };
+            });
+
+            const response = await fetch("http://127.0.0.1:8000/define_tool/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: entry.toolName,
+                description: entry.toolDescription,
+                fields: fields,
+              }),
+            });
+
+            if (!response.ok) throw new Error("Failed to define tool");
+          }
+        } catch (err) {
+          setError("Failed to define tools. Please try again.");
+        }
 
         if (!response.ok) throw new Error("Failed to define tool");
       }
@@ -126,10 +153,11 @@ export default function App() {
 
   const fetchTools = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/list_tools/");
+      const response = await fetch("http://localhost:5000/list_tools/"); // Change this to your actual API route
       if (!response.ok) throw new Error("Failed to fetch tools");
       const data = await response.json();
-      setTools(data.tools);
+      console.log(data);
+      setTools(data.tools); // Assuming the response is an array of tools
     } catch (err) {
       setError("Failed to fetch tools. Please try again.");
     }
@@ -153,10 +181,11 @@ export default function App() {
       const toolsResponse =
         data.response.tool_calls?.map((tool) => ({
           name: tool.name,
-          args: tool.args,
+          args: tool.args.kwargs, // Extract kwargs directly
         })) || [];
 
-      setResponse(toolsResponse);
+      console.log("Tools Response:", toolsResponse);
+      setResponse(toolsResponse); // Store all tool responses in state
     } catch (error) {
       setError("Failed to fetch response. Please try again.");
     }
@@ -299,24 +328,24 @@ export default function App() {
                 Add Tools
               </button>
             </div>
-
-            {tools.length > 0 && (
+            {tools?.length > 0 && (
               <div className="defined-tools">
                 <h2>Defined Tools</h2>
                 <div className="tools-list">
-                  {tools.map((tool, index) => (
-                    <div key={index} className="tool-item">
+                  {tools.map((tool) => (
+                    <div key={tool._id} className="tool-item">
                       <h3>{tool.name}</h3>
                       <p className="tool-description">{tool.description}</p>
                       <div className="tool-fields">
-                        {Object.entries(tool.fields).map(
-                          ([fieldName, fieldInfo]) => (
-                            <div key={fieldName} className="tool-field">
-                              <span>{fieldName}</span>: {fieldInfo.field_type} -{" "}
-                              {fieldInfo.description}
-                            </div>
-                          )
-                        )}
+                        {tool.fields &&
+                          Object.entries(tool.fields).map(
+                            ([fieldName, fieldInfo]) => (
+                              <div key={fieldInfo._id} className="tool-field">
+                                <strong>{fieldName}</strong>:{" "}
+                                {fieldInfo.field_type} - {fieldInfo.description}
+                              </div>
+                            )
+                          )}
                       </div>
                     </div>
                   ))}
@@ -350,7 +379,23 @@ export default function App() {
                   <Terminal />
                   <span>Response</span>
                 </h2>
-                <pre>{JSON.stringify(response, null, 2)}</pre>
+                <div className="tool-calls">
+                  {response.map((tool, index) => (
+                    <div key={index} className="tool-call">
+                      <h3 className="tool-name">{tool.name}</h3>
+                      <div className="tool-arguments">
+                        <h4>Arguments:</h4>
+                        <ul>
+                          {Object.entries(tool.args).map(([key, value]) => (
+                            <li key={key}>
+                              <strong>{key}:</strong> {value.toString()}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
