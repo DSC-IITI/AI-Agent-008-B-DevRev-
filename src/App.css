@@ -1,0 +1,344 @@
+.app-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+    padding: 1rem;
+  }
+  
+  .content-wrapper {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .header {
+    background: #2563eb;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .header-icon {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+  }
+  
+  .header-subtitle {
+    color: #bfdbfe;
+    margin-top: 0.5rem;
+  }
+  
+  .main-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .tool-definition {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .tool-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .tool-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .add-tool-entry-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+  }
+  
+  .add-tool-entry-btn:hover {
+    background: #1d4ed8;
+  }
+  
+  .tool-entry {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1rem;
+  }
+  
+  .tool-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .tool-entry-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .remove-tool-btn {
+    padding: 0.25rem;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+  
+  .remove-tool-btn:hover {
+    background: #dc2626;
+  }
+  
+  .tool-basic-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .field-definition {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .field-definition input:first-child {
+    width: 25%;
+  }
+  
+  .field-definition select {
+    width: 25%;
+  }
+  
+  .field-definition input:nth-child(3) {
+    width: 40%;
+  }
+  
+  .field-actions {
+    display: flex;
+    gap: 0.25rem;
+    width: 10%;
+  }
+  
+  input, select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  }
+  
+  .add-field-btn, .remove-field-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+  
+  .add-field-btn {
+    background: #16a34a;
+    color: white;
+  }
+  
+  .add-field-btn:hover {
+    background: #15803d;
+  }
+  
+  .remove-field-btn {
+    background: #ef4444;
+    color: white;
+  }
+  
+  .remove-field-btn:hover {
+    background: #dc2626;
+  }
+  
+  .add-tool-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  
+  .add-tool-btn:hover {
+    background: #1d4ed8;
+  }
+  
+  .defined-tools {
+    margin-top: 1.5rem;
+  }
+  
+  .tools-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .tool-item {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .tool-item h3 {
+    color: #2563eb;
+    font-weight: 600;
+  }
+  
+  .tool-description {
+    color: #4b5563;
+    margin-top: 0.25rem;
+  }
+  
+  .tool-fields {
+    margin-top: 0.5rem;
+  }
+  
+  .tool-field {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .tool-field span {
+    font-weight: 500;
+  }
+  
+  .query-form {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .query-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+  }
+  
+  .submit-btn {
+    padding: 0.5rem 1.5rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+  
+  .submit-btn:hover:not(:disabled) {
+    background: #1d4ed8;
+  }
+  
+  .submit-btn:disabled {
+    background: #93c5fd;
+    cursor: not-allowed;
+  }
+  
+  .loading-icon {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .error-message {
+    padding: 1rem;
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #dc2626;
+  }
+  
+  .response {
+    margin-top: 1.5rem;
+  }
+  
+  .response h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  
+  .response pre {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    margin-top: 0.5rem;
+    overflow-x: auto;
+    font-family: monospace;
+  }
