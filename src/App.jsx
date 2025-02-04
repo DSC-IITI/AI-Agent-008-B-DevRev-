@@ -116,7 +116,7 @@ export default function App() {
               };
             });
 
-            const response = await fetch("http://127.0.0.1:8000/define_tool/", {
+            const response = await fetch("https://da9b-34-28-130-29.ngrok-free.app/define_tool/", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -156,16 +156,100 @@ export default function App() {
       const response = await fetch("http://localhost:5000/list_tools/"); // Change this to your actual API route
       if (!response.ok) throw new Error("Failed to fetch tools");
       const data = await response.json();
-      console.log(data);
-      setTools(data.tools); // Assuming the response is an array of tools
+      console.log("Fetched tools:", data.tools);
+      setTools(data.tools); // Update the tools state
+      return data; // Return the tools array
     } catch (err) {
       setError("Failed to fetch tools. Please try again.");
+      return []; // Return an empty array in case of an error
     }
   };
+  
+  const sendTools = async (tools) => {
+    try {
+      console.log(tools);
+      const convertedTools = tools.tools.map(tool => ({
+        toolName: tool.name,
+        toolDescription: tool.description,
+        fieldRows: Object.entries(tool.fields).map(([key, value]) => ({
+            name: key,
+            type: value.field_type,
+            description: value.description
+        }))
+    }));
+      for (const entry of convertedTools) {
+        console.log("Sending tool:", entry.toolName);
+        const fields = {};
+        entry.fieldRows.forEach((row) => {
+          fields[row.name] = {
+            field_type: row.type,
+            description: row.description,
+          };
+        });
 
+        const response = await fetch("https://da9b-34-28-130-29.ngrok-free.app/define_tool/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: entry.toolName,
+            description: entry.toolDescription,
+            fields: fields,
+          }),
+        });
+        console.log(response);
+        if (!response.ok) throw new Error("Failed to define tool");
+      }
+    } catch (err) {
+      setError("Failed to send tools. Please try again.");
+    }
+  };
+  
   useEffect(() => {
-    fetchTools();
+    const fetchAndSendTools = async () => {
+      const fetchedtools = await fetchTools(); // Fetch tools and wait for the result
+      console.log(fetchedtools)
+      
+        console.log("Sending tools to backend...");
+        sendTools(fetchedtools); // Send tools only if fetching was successful
+      
+    };
+  
+    fetchAndSendTools();
   }, []);
+  
+  
+  // useEffect(() => {
+  //   sendTools();
+  // }, [tools]);
+
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setResponse(null);
+  //   setError(null);
+
+  //   try {
+  //     const res = await fetch(
+  //       `https://3160-35-185-163-135.ngrok-free.app/invoke/?query=${encodeURIComponent(query)}`
+  //     );
+  //     const data = await res.json();
+  //     const toolsResponse =
+  //       data.response.tool_calls?.map((tool) => ({
+  //         name: tool.name,
+  //         args: tool.args.kwargs, // Extract kwargs directly
+  //       })) || [];
+
+  //     console.log("Tools Response:", toolsResponse);
+  //     setResponse(toolsResponse); // Store all tool responses in state
+  //   } catch (error) {
+  //     setError("Failed to fetch response. Please try again.");
+  //   }
+
+  //   setLoading(false);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -173,25 +257,53 @@ export default function App() {
     setResponse(null);
     setError(null);
 
+    console.log("Sending request to backend...");
+
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/invoke/?query=${encodeURIComponent(query)}`
+        `https://da9b-34-28-130-29.ngrok-free.app/invoke/?query=${encodeURIComponent(query)}`,
+        {
+          method: "GET",
+          headers: {
+            "ngrok-skip-browser-warning": "true",  // 👈 Bypasses ngrok warning page
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",  // 👈 Mimics a real browser
+          },
+        }
       );
+
+      console.log("Request sent, awaiting response...");
+
       const data = await res.json();
+      console.log("Full response data:", data);
+
       const toolsResponse =
-        data.response.tool_calls?.map((tool) => ({
-          name: tool.name,
-          args: tool.args.kwargs, // Extract kwargs directly
-        })) || [];
+        data?.response?.additional_kwargs?.tool_calls?.map((tool) => {
+          let parsedArgs = {};
+          try {
+            parsedArgs = JSON.parse(tool.function.arguments).kwargs || {};  // ✅ Correctly parse arguments
+          } catch (error) {
+            console.error("Error parsing tool arguments:", error);
+          }
+
+          return {
+            name: tool.function.name,  // ✅ Correct property for tool name
+            args: parsedArgs,
+          };
+        }) || [];
 
       console.log("Tools Response:", toolsResponse);
-      setResponse(toolsResponse); // Store all tool responses in state
+      setResponse(toolsResponse);
     } catch (error) {
+      console.error("Fetch error:", error);
       setError("Failed to fetch response. Please try again.");
     }
 
     setLoading(false);
-  };
+};
+
+  
+  
+  
 
   return (
     <div className="app-container">

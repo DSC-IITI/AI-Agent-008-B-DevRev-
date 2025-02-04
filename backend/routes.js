@@ -7,6 +7,8 @@ import cors from "cors";
 const app = express();
 app.use(express.json()); // Middleware to parse JSON requests
 
+// const ngrokURL = process.env.NGROK_URL || "https://264c-35-233-246-115.ngrok-free.app"; 
+
 app.use(
   cors({
     origin: "http://localhost:5173", // Replace with your frontend's origin

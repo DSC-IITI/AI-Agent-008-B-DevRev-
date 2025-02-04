@@ -1,0 +1,7 @@
+typing-extensions
+types
+fastapi
+pydantic
+langchain_groq
+fastapi-cors-middleware
+langchain-tools
